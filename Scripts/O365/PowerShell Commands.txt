@@ -1,0 +1,111 @@
+Get-AppxPackage -AllUsers -Name Microsoft.XboxApp | Remove-AppxPackage
+
+Get-AppxPackage -AllUsers -Name Microsoft.Store | Remove-AppxPackage
+
+Get-AppxPackage -AllUsers -Name Microsoft.ZuneMusic | Remove-AppxPackage
+
+Get-AppxPackage -AllUsers -Name Microsoft.BingSports | Remove-AppxPackage
+
+Set-MsolUserPrincipalName –NewUserPrincipalName justin.schulze@westcoastprimemeats.com 
+-UserPrincipalName justin.shulze@westcoastprimemeats.com 
+   *FIRST RUN "Connect-Msolservice" 
+*************************************************************************
+
+Add ALL users in OU to security group
+
+1- Get-ADuser -FIlter * | ft Name, DistinguishedName -Autosize
+2-Get-ADUser -SearchBase ‘OU=Example0 Example,DC=AD,DC=Example,DC=com’ -Filter * | ForEach-Object {Add-ADGroupMember -Identity ‘EXAMPLE GROUP’ -Members $_ -WhatIf}
+3-Get-ADUser -SearchBase ‘OU=Example0 Example,DC=AD,DC=Example,DC=com’ -Filter * | ForEach-Object {Add-ADGroupMember -Identity ‘EXAMPLE GROUP’ -Members $_}
+
+*****************************************************************************
+
+Display Folder Permission (Contact and Calendar) 
+
+Get-MailboxFolderPermission John:\calendar  | Select user, AccessRights
+
+****************************************************************************
+
+Assign Folder Permission to Contacts and Calendar 
+
+Add-MailboxFolderPermission -Identity user1@domain.com:\calendar -user user2@domain.com -AccessRights Editor
+
+Owner
+PublishingEditor
+Author
+Reviewer
+Contributor
+
+
+****************************************************************************************************************
+
+Permantely Delete O365 Groups and Inbox 
+
+*update Powershell*
+
+Install-Module AzureADPreview
+
+Then: Connect-AzureAD
+
+
+*sign in*
+
+Get-AzureADMSDeletedGroup  
+
+*take note of ID*
+
+
+Remove-AzureADMSDeletedDirectoryObject -Id <objectId>
+
+******Inbox********
+open powershell 
+
+Install-Module MSOnline 
+
+Connect-MsolService
+
+Remove-MsolUser -RemoveFromRecycleBin –userprincipalname "emailaddress"
+
+****************************************************************************************************
+
+Remove User AD from ALL GROUPS: 
+
+Remove-ADPrincipalGroupMembership -Identity $employeeSAN -MemberOf $ADgroups -Server $adServer -Confirm:$false
+
+
+**************************************************************************************************************************************
+
+Move Corrupted Inbox to New Database
+
+Connect to O365 as admin
+
+
+Enter command: 
+
+New-MoveRequest -Identity "Email Address" (use quotes)
+
+************************************************************
+Check Database Move Request
+
+Get-MoveRequestStatistics -Identity fdavis@strategicperception.com
+
+
+*****************************************************************************************************************************
+
+DKIM
+
+Get-DkimSigningConfig -Identity <domain> | fl Selector1CNAME, Selector2CNAME
+
+
+Get-DkimSigningConfig -Identity contoso.com | Format-List
+
+****************************************************************************************
+Disable automap
+Add-MailboxPermission -Identity <account you don't want automapped> -User <account of user you're helping> -AccessRights ReadPermission -AutoMapping $false
+
+
+
+
+
+
+
+
