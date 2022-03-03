@@ -1,0 +1,1 @@
+﻿Get-WindowsFeature | Where-object {$_.installstate -eq "installed"} | Select-Object name, installstate | Export-Csv  -Path "D:\SAS Share\roles.csv" -NoTypeInformation
